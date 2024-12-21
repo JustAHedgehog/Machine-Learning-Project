@@ -21,13 +21,14 @@ output_cols = ['上衣', '外套', '褲子 / 裙子', '為了因應天氣所配�
 rating_mapping = {'是，穿的剛剛好，不會太熱也不會太冷': 1, '否，我覺得我穿太少了，應該要多加幾件': -1, '否，穿太厚了，在室內沒開冷氣很熱': -1}
 df['適中性'] = df['你覺得今天的穿著適中嗎？'].map(rating_mapping)
 
+# def preprocesser():
 # 數據預處理流水線
 numerical_transformer = StandardScaler()
 categorical_transformer = OneHotEncoder()
 
 preprocessor = ColumnTransformer(
-    transformers=[('num', numerical_transformer, ['穿著本套衣服時的溫度(°C)', 
-                                                  '穿著本套衣服時的體感溫度 (°C)', 
+    transformers=[('num', numerical_transformer, ['現在穿著本套衣服時的溫度(°C)', 
+                                                  '現在穿著本套衣服時的體感溫度 (°C)', 
                                                   '穿著本套衣服時的相對濕度(%)']),
                   ('cat', categorical_transformer, ['性別', '本套衣服今日主要活動範圍'])]
 )
@@ -54,7 +55,7 @@ ids = [str(uuid.uuid4()) for _ in range(len(df))]
 collection.add(
     documents=documents,
     metadatas=metadatas,
-    embeddings=X_inputs.toarray().tolist(), # TODO check toarray()
+    embeddings=X_inputs.tolist(),
     ids=ids
 )
 
