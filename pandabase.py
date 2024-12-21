@@ -55,7 +55,7 @@ ids = [str(uuid.uuid4()) for _ in range(len(df))]
 collection.add(
     documents=documents,
     metadatas=metadatas,
-    embeddings=X_inputs.tolist(),
+    embeddings=X_inputs.tolist(), # TODO check toarray()
     ids=ids
 )
 
