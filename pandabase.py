@@ -55,7 +55,7 @@ ids = [str(uuid.uuid4()) for _ in range(len(df))]
 collection.add(
     documents=documents,
     metadatas=metadatas,
-    embeddings=X_inputs.tolist(), # TODO check toarray()
+    embeddings=X_inputs.tolist(),
     ids=ids
 )
 
@@ -63,24 +63,24 @@ print(f"插入了 {len(df)} 條資料進入 Chroma 資料庫")
 
 # 查詢：條件 (輸入溫度、性別等)
 query_data = {
-    '穿著本套衣服時的溫度(°C)': [22],
-    '穿著本套衣服時的體感溫度 (°C)': [21],
+    '現在穿著本套衣服時的溫度(°C)': [22],
+    '現在穿著本套衣服時的體感溫度 (°C)': [21],
     '穿著本套衣服時的相對濕度(%)': [60],
     '性別': ['男'],
     '本套衣服今日主要活動範圍': ['室內']
 }
 query_df = pd.DataFrame(query_data)
 query_inputs = pipeline.transform(query_df)
-query_embeddings = query_inputs.toarray().flatten()
+query_embeddings = query_inputs.flatten()
 
 # 查詢 Chroma 資料庫
-query_results = collection.query(query_embeddings=query_embeddings, n_results=5)
+query_results = collection.query(query_embeddings=query_embeddings, n_results=3)
 
 # 過濾結果 (移除「穿太多」或「穿太少」的結果)
 filtered_results = [
     (doc, meta, dist) for doc, meta, dist in 
     zip(query_results['documents'], query_results['metadatas'], query_results['distances'])
-    if meta['適中性'] == 1  # 只保留「適中」的結果
+    if meta[0]['適中性'] == 1  # 只保留「適中」的結果
 ]
 
 # 顯示結果
