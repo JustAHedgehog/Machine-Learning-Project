@@ -9,6 +9,7 @@ import shutil
 
 # 讀取CSV數據
 df = pd.read_csv('data.csv')
+df = df.drop(columns=['時間戳記', '電子郵件'])
 df.columns = df.columns.str.strip()
 
 # 定義輸入特徵
@@ -21,7 +22,6 @@ output_cols = ['上衣', '外套', '褲子 / 裙子', '為了因應天氣所配�
 rating_mapping = {'是，穿的剛剛好，不會太熱也不會太冷': 1, '否，我覺得我穿太少了，應該要多加幾件': -1, '否，穿太厚了，在室內沒開冷氣很熱': -1}
 df['適中性'] = df['你覺得今天的穿著適中嗎？'].map(rating_mapping)
 
-# def preprocesser():
 # 數據預處理流水線
 numerical_transformer = StandardScaler()
 categorical_transformer = OneHotEncoder()
